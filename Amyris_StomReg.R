@@ -5,6 +5,11 @@
 #searching for the maximum value. Working with file StomReg_v01 
 
 str(StomReg_v01)
+class(AE1)
+is.data.frame(AE1)
+AE1
+rm(AE1)
+
 #convert Interval into a factor variable
 StomReg_v01$Interval <- factor(StomReg_v01$Interval)
 
@@ -15,11 +20,12 @@ AE1 = StomReg_v01$Species == "AE"
 SR.AE = StomReg_v01[AE1, ]
 
 #using the plot function
-plot(x = AE.1$Mean_VPD_Krober_tree, y = AE.1$Mean_gs_tree,
+plot(x = SR.AE$Mean_VPD_Krober_tree, y = SR.AE$Mean_gs_tree,
      xlab = "vpd [hPa]",
      ylab = "gs Conductance [mmol m-2s-1]",
      main = "scatter plot",
-     xlim = c(0, 21), ylim = c(0, 600)) 
+     xlim = c(0, 21), ylim = c(0, 600),
+     by = "SR.AE$Interval") 
 
 #dixon test to test for outliers
 install.packages("outliers")
