@@ -1,11 +1,26 @@
-GK1 = StomReg_v01$Species == "GK"
-SR.GK = StomReg_v01[GK1, ]
+#Krober et al. 2015 Protocol 4.1
+#Model gs-vpd response. Begin by plotting species-wise all gs data against vpd, 
+#combining all daily courses of individual leaves into one analysis per species.
+#Extract the maximum value observed from the stomatal conductance data by 
+#searching for the maximum value. Working with file StomReg_v02 which 
+#you must import first
+
+#subset Guettarda K data 
+GK1 = StomReg_v02$Species == "GK"
+SR.GK = StomReg_v02[GK1, ]
 SR.GK
+
+#plot data to assess curves
+
+lo = loess(SR.GK$Mean_gs_tree~SR.GK$Mean_VPD_Krober_tree)
 plot(x = SR.GK$Mean_VPD_Krober_tree, y = SR.GK$Mean_gs_tree,
      xlab = "vpd [hPa]",
      ylab = "gs Conductance [mmol m-2s-1]",
      main = "scatter plot",
-     xlim = c(0, 20), ylim = c(0, 1200)) 
+     xlim = c(0, 20), ylim = c(0, 1200))
+lines(predict(lo), col="red", lwd=2)
+
+qplot(SR.GK$Mean_VPD_Krober_tree, SR.GK$Mean_gs_tree, geom = "smooth", span = 0.5)
 
 a = plot(x = SR.ZF$Mean_lwp_tree, y = SR.ZF$Mean_gs_tree)
 a
@@ -23,7 +38,7 @@ summary(GK.qu)
 
 rm(GKpredictedcounts)
 GKpredictedcounts <- predict(GK.qu, list(lwp = SR.GK$Mean_lwp_tree, lwpsq = SR.GK$Mean_lwp_tree^2))
-gkplot.qu = plot(SR.GK2$Mean_lwp_tree, SR.GK2$Mean_gs_tree, pch=16, xlab = "lwp (kPa)", ylab = "gs conductance", cex.lab = 1.3, col = "blue")
+gkplot.qu = plot(SR.GK2$Mean_lwp_tree, SR.GK2$gs_rel, pch=16, xlab = "lwp (kPa)", ylab = "gs conductance", cex.lab = 1.3, col = "blue")
 
 GKpredictedcounts <- cbind(SR.GK2, predict(GK.qu, interval = 'confidence'))
 GKpredictedcounts
@@ -43,8 +58,9 @@ GK.lmdf <- merge(SR.GK3, GKpredictedcounts)
 head(GK.lmdf)
 str(GK.lmdf)
 GK.lmdf
-ggplot(SR.GK3, aes(x=SR.GK3$Mean_lwp_tree, y=SR.GK3$Mean_gs_tree)) +
+ggplot(SR.GK3, aes(x=SR.GK3$Mean_lwp_tree, y=SR.GK3$gs_rel)) +
   geom_point() +
   geom_abline(data = GKpredictedcounts)
+
 
 
