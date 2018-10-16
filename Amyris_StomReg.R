@@ -4,6 +4,8 @@
 #Extract the maximum value observed from the stomatal conductance data by 
 #searching for the maximum value. Working with file StomReg_v01 which you must import first
 
+changes
+
 str(StomReg_v02)
 class(AE1)
 is.data.frame(AE1)
