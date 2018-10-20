@@ -1,18 +1,17 @@
 #Krober et al. 2015 Protocol 4.1
-#Model gs-vpd response. Begin by plotting species-wise all gs data against vpd, 
+#MODEL GS-VPD RESPONSE. 
+#Begin by plotting species-wise all gs data against vpd, 
 #combining all daily courses of individual leaves into one analysis per species.
 #Extract the maximum value observed from the stomatal conductance data by 
 #searching for the maximum value. Working with file StomReg_v01 which you must import first
 
-changes
-
 str(StomReg_v02)
 class(AE1)
 is.data.frame(AE1)
-AE1
+#AE1
 rm(AE1)
 
-#convert Interval into a factor variable
+#convert "Interval" into a factor variable
 StomReg_v02$Interval <- factor(StomReg_v02$Interval)
 
 #instruct R to subset all data from species AE
@@ -22,12 +21,24 @@ AE1 = StomReg_v02$Species == "AE"
 SR.AE = StomReg_v02[AE1, ]
 
 #using the plot function
-plot(x = SR.AE$Mean_VPD_Krober_tree, y = SR.AE$Mean_gs_tree,
-     xlab = "vpd [hPa]",
+#plot(x = SR.AE$Mean_VPD_Krober_tree, y = SR.AE$Mean_gs_tree,
+#     xlab = "vpd [hPa]",
+#     ylab = "gs Conductance [mmol m-2s-1]",
+#     main = "scatter plot",
+#     xlim = c(0, 21), ylim = c(0, 600),
+#     by = "SR.AE$Interval") 
+
+
+attach(SR.AE)
+detach(SR.AE)
+
+#plotting Spring 17 measurements for AE
+plot(Mean_lwp_tree, Mean_gs_tree,
+     xlab = "leaf water potential [MPa]",
      ylab = "gs Conductance [mmol m-2s-1]",
-     main = "scatter plot",
-     xlim = c(0, 21), ylim = c(0, 600),
-     by = "SR.AE$Interval") 
+     main = "scatter plot")
+
+
 
 #dixon test to test for outliers
 install.packages("outliers")
